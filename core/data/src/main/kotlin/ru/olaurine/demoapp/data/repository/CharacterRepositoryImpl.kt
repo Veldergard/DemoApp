@@ -1,7 +1,9 @@
 package ru.olaurine.demoapp.data.repository
 
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import ru.olaurine.demoapp.data.model.CharacterDto
 import ru.olaurine.demoapp.data.model.CharacterGender
 import ru.olaurine.demoapp.data.model.CharacterStatus
@@ -15,7 +17,7 @@ class CharacterRepositoryImpl @Inject constructor(
     private val characterDataSource: CharacterDataSource,
     private val characterDao: CharacterDao
 ) : CharacterRepository {
-    override suspend fun syncCharacter(characterId: Int) {
+    override suspend fun syncCharacter(characterId: Int) = withContext(Dispatchers.IO) {
         characterDataSource.getCharacterInfo(id = characterId).toEntity().let {
             characterDao.insertCharacter(it)
         }
