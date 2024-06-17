@@ -6,8 +6,11 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
+import ru.olaurine.demoapp.network.BuildConfig
 import ru.olaurine.demoapp.network.CharacterDataSource
 import ru.olaurine.demoapp.network.retrofit.CharacterService
 import ru.olaurine.demoapp.network.retrofit.CharacterRetrofitDataSource
@@ -19,6 +22,21 @@ internal object NetworkModule {
 
     @Provides
     fun provideBaseUrl() = "https://rickandmortyapi.com/api/"
+
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(
+        okHttpClientBuilder: OkHttpClient.Builder,
+    ): OkHttpClient =
+        with(okHttpClientBuilder) {
+            if (BuildConfig.DEBUG) {
+                val httpLogger = HttpLoggingInterceptor().apply {
+                    level = HttpLoggingInterceptor.Level.BODY
+                }
+                addNetworkInterceptor(httpLogger)
+            }
+            build()
+        }
 
     @Provides
     @Singleton

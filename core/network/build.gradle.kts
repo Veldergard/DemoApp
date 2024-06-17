@@ -29,6 +29,9 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 dependencies {
@@ -37,6 +40,7 @@ dependencies {
     implementation(libs.retrofit.core)
     implementation(libs.retrofit.serialization.converter)
     implementation(libs.okhttp)
+    implementation(libs.okhttp.logging.interceptor)
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)

@@ -8,7 +8,7 @@ import ru.olaurine.demoapp.data.model.CharacterStatus
 import ru.olaurine.demoapp.database.dao.CharacterDao
 import ru.olaurine.demoapp.database.entities.CharacterEntity
 import ru.olaurine.demoapp.network.CharacterDataSource
-import ru.olaurine.demoapp.network.model.CharacterRemote
+import ru.olaurine.demoapp.network.model.CharacterResponse
 import javax.inject.Inject
 
 class CharacterRepositoryImpl @Inject constructor(
@@ -55,7 +55,7 @@ class CharacterRepositoryImpl @Inject constructor(
         )
     }
 
-    private fun CharacterRemote.toEntity(): CharacterEntity {
+    private fun CharacterResponse.toEntity(): CharacterEntity {
         return CharacterEntity(
             created = created,
             episodeIds = episode.map { it.substring(it.lastIndexOf("/") + 1).toInt() },

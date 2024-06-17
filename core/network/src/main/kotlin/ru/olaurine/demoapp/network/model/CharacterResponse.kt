@@ -3,7 +3,7 @@ package ru.olaurine.demoapp.network.model
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CharacterRemote(
+data class CharacterResponse(
     val id: Int,
     val name: String,
     val status: String,

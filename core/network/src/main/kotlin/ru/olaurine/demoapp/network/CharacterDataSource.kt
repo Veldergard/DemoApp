@@ -1,7 +1,7 @@
 package ru.olaurine.demoapp.network
 
-import ru.olaurine.demoapp.network.model.CharacterRemote
+import ru.olaurine.demoapp.network.model.CharacterResponse
 
 interface CharacterDataSource {
-    suspend fun getCharacterInfo(id: Int = 0): CharacterRemote
+    suspend fun getCharacterInfo(id: Int = 0): CharacterResponse
 }
