@@ -16,7 +16,7 @@ class CharacterRepositoryImpl @Inject constructor(
     private val characterDao: CharacterDao
 ) : CharacterRepository {
     override suspend fun syncCharacter(characterId: Int) {
-        characterDataSource.getCharacterInfo().toEntity().let {
+        characterDataSource.getCharacterInfo(id = characterId).toEntity().let {
             characterDao.insertCharacter(it)
         }
     }

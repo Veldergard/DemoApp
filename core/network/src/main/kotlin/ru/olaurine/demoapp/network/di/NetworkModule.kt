@@ -1,8 +1,10 @@
 package ru.olaurine.demoapp.network.di
 
+import android.content.Context
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -24,6 +26,9 @@ internal object NetworkModule {
     fun provideBaseUrl() = "https://rickandmortyapi.com/api/"
 
     @Provides
+    fun provideOkHttpClientBuilder(): OkHttpClient.Builder = OkHttpClient.Builder()
+
+    @Provides
     @Singleton
     fun provideOkHttpClient(
         okHttpClientBuilder: OkHttpClient.Builder,
@@ -40,7 +45,11 @@ internal object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(baseUrl: String): Retrofit = Retrofit.Builder()
+    fun provideRetrofit(
+        baseUrl: String,
+        okHttpClient: OkHttpClient
+    ): Retrofit = Retrofit.Builder()
+        .client(okHttpClient)
         .baseUrl(baseUrl)
         .addConverterFactory(
             Json.asConverterFactory(
@@ -51,7 +60,8 @@ internal object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideCharacterService(retrofit: Retrofit): CharacterService = retrofit.create(CharacterService::class.java)
+    fun provideCharacterService(retrofit: Retrofit): CharacterService =
+        retrofit.create(CharacterService::class.java)
 
     @Provides
     @Singleton
