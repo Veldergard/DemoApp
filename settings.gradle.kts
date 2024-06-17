@@ -21,3 +21,8 @@ dependencyResolutionManagement {
 
 rootProject.name = "DemoApp"
 include(":app")
+include(":core:network")
+include(":core:database")
+include(":core:data")
+include(":feature:character")
+include(":core:common")
