@@ -1,8 +1,9 @@
 package ru.olaurine.demoapp.data.repository
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.withContext
 import ru.olaurine.demoapp.data.model.CharacterDto
 import ru.olaurine.demoapp.data.model.CharacterGender
@@ -19,13 +20,15 @@ class CharacterRepositoryImpl @Inject constructor(
 ) : CharacterRepository {
     override suspend fun syncCharacter(characterId: Int) = withContext(Dispatchers.IO) {
         characterDataSource.getCharacterInfo(id = characterId).toEntity().let {
-            characterDao.insertCharacter(it)
+            withContext(NonCancellable) {
+                characterDao.insertCharacter(it)
+            }
         }
     }
 
-    override fun observeCharacter(characterId: Int): Flow<CharacterDto?> {
-        return characterDao.observeCharacter(characterId)
-            .map { characterEntity ->
+    override fun getCharacterDataFlow(characterId: Int?): Flow<CharacterDto?> {
+        return characterDao.getCharacterDataFlow(characterId)
+            .mapNotNull { characterEntity ->
                 characterEntity?.toDto()
             }
     }

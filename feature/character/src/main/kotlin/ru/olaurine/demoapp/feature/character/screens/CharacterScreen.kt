@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -37,8 +38,11 @@ sealed interface CharacterViewState {
 @Composable
 fun CharacterScreen(
     characterId: Int,
-    viewModel: CharacterViewModel = hiltViewModel(),
 ) {
+    val viewModel = hiltViewModel<CharacterViewModel, CharacterViewModel.Factory> { factory ->
+        factory.create(characterId = characterId)
+    }
+
     LaunchedEffect(key1 = Unit, block = {
         viewModel.syncCharacter(characterId)
     })
@@ -47,7 +51,7 @@ fun CharacterScreen(
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(all = 16.dp)
+        contentPadding = PaddingValues(all = 16.dp),
     ) {
         when (val viewState = state) {
             CharacterViewState.Loading -> {
@@ -55,7 +59,9 @@ fun CharacterScreen(
             }
 
             is CharacterViewState.Error -> {
-                // TODO
+                item {
+                    Text(viewState.message)
+                }
             }
 
             is CharacterViewState.Success -> {

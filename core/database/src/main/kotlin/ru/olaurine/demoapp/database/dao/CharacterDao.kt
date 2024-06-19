@@ -15,5 +15,5 @@ interface CharacterDao {
     fun insertCharacter(character: CharacterEntity)
 
     @Query("SELECT * FROM $CHARACTER_TABLE WHERE id = :characterId")
-    fun observeCharacter(characterId: Int): Flow<CharacterEntity?>
+    fun getCharacterDataFlow(characterId: Int?): Flow<CharacterEntity?>
 }

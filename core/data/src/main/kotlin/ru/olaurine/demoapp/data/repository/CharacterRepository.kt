@@ -5,7 +5,7 @@ import ru.olaurine.demoapp.data.model.CharacterDto
 
 interface CharacterRepository {
 
-    suspend fun syncCharacter(characterId: Int)
+    fun getCharacterDataFlow(characterId: Int?): Flow<CharacterDto?>
 
-    fun observeCharacter(characterId: Int): Flow<CharacterDto?>
+    suspend fun syncCharacter(characterId: Int)
 }
